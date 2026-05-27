@@ -5,7 +5,12 @@ from summarizer import summarize_stock
 from telegram_sender import send_telegram_message
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
-with open("tickers.json") as f:
+from pathlib import Path
+import json
+
+BASE_DIR = Path(__file__).resolve().parent
+
+with open(BASE_DIR / "tickers.json", encoding="utf-8") as f:
     tickers = json.load(f)
 final_message = "📈 오늘의 주요 종목 브리핑\n\n"
 
