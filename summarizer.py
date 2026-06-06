@@ -3,14 +3,15 @@ from config import GEMINI_API_KEY
 
 _GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.0-flash:generateContent?key=" + GEMINI_API_KEY
+    "gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY
 )
 
 
 def _translate(titles: list[str]) -> list[str]:
     prompt = (
         "다음 영어 뉴스 제목들을 자연스러운 한국어로 번역해줘. "
-        "번호와 번역문만 출력하고 다른 설명은 쓰지 마.\n"
+        "반드시 번호와 번역문만 출력하고 설명, 원문, 주석은 절대 쓰지 마.\n"
+        "예시:\n1. 번역된 제목\n2. 번역된 제목\n\n"
         + "\n".join(f"{i+1}. {t}" for i, t in enumerate(titles))
     )
     try:
