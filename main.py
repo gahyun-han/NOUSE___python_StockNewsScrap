@@ -7,12 +7,26 @@ from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
 BASE_DIR = Path(__file__).resolve().parent
 
-with open(BASE_DIR / "tickers.json", encoding="utf-8") as f:
-    tickers = json.load(f)
+# /list 관심종목과 항상 동기화 — UserCustomStockinfo_agent의 watchlist를 우선 사용
+_WATCHLIST_PATH = BASE_DIR.parent / "UserCustomStockinfo_agent" / "user_watchlist.json"
+_TICKERS_PATH = BASE_DIR / "tickers.json"
+
+if _WATCHLIST_PATH.exists():
+    with open(_WATCHLIST_PATH, encoding="utf-8") as f:
+        watchlist_data = json.load(f)
+    # watchlist는 {chat_id: [ticker, ...]} 구조 — 전체 종목 합집합 사용
+    us_tickers = []
+    for tickers_list in watchlist_data.values():
+        for t in tickers_list:
+            if t not in us_tickers:
+                us_tickers.append(t)
+else:
+    with open(_TICKERS_PATH, encoding="utf-8") as f:
+        us_tickers = json.load(f).get("us", [])
 
 # 모든 종목 데이터 수집
 stocks_data = []
-for ticker in tickers["us"]:
+for ticker in us_tickers:
     data = get_us_stock_data(ticker)
     print(data)
     stocks_data.append(data)

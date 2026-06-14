@@ -1,8 +1,4 @@
 {
-  "us": [
-    "NVDA",
-    "TSLA",
-    "PLTR"
-  ],
+  "us": ["SOXL", "TQQQ", "SPY", "SPCX"],
   "kr": []
 }
