@@ -71,10 +71,15 @@ def build_messages(stocks_data: list[dict]) -> str:
         idx += n
 
         ticker = stock_info["ticker"]
-        change_pct = float(stock_info["change_pct"])
-        direction = "상승" if change_pct > 0 else "하락"
+        raw_pct = stock_info.get("change_pct")
+        if raw_pct is None:
+            pct_str = "전일 데이터 없음"
+        else:
+            change_pct = float(raw_pct)
+            direction = "상승" if change_pct > 0 else "하락"
+            pct_str = f"전일 대비 {abs(change_pct):.2f}% {direction}"
 
-        message += f"📌 {ticker}\n- 전일 대비 {abs(change_pct):.2f}% {direction}\n\n📰 주요 뉴스:\n"
+        message += f"📌 {ticker}\n- {pct_str}\n\n📰 주요 뉴스:\n"
         for title in translated:
             message += f"- {title}\n"
         message += "\n"

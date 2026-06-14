@@ -8,19 +8,21 @@ def get_us_stock_data(ticker):
 
     hist = stock.history(period="2d")
 
-    if len(hist) < 2:
+    if len(hist) == 0:
         return None
 
-    prev_close = hist.iloc[-2]["Close"]
     last_close = hist.iloc[-1]["Close"]
-
-    change_pct = ((last_close - prev_close) / prev_close) * 100
+    if len(hist) >= 2:
+        prev_close = hist.iloc[-2]["Close"]
+        change_pct = round(((last_close - prev_close) / prev_close) * 100, 2)
+    else:
+        change_pct = None  # 전일 데이터 없음 (상장 첫날 등)
 
     news = stock.news
 
     return {
         "ticker": ticker,
-        "change_pct": round(change_pct, 2),
+        "change_pct": change_pct,
         "news": news[:5]
     }
 

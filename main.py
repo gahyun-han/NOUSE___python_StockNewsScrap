@@ -37,6 +37,7 @@ try:
     final_message += build_messages(stocks_data)
 except Exception as e:
     print("요약 오류:", e)
+    final_message += f"⚠️ 요약 생성 중 오류 발생: {e}"
 
 send_telegram_message(
     token=TELEGRAM_TOKEN,
